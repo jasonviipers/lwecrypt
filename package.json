@@ -17,7 +17,12 @@
 		"encoding",
 		"auth",
 		"random",
-		"password"
+		"password",
+		"lattice",
+		"encryption",
+		"typescript",
+		"lwe",
+		"learning with errors"
 	],
 	"license": "MIT",
 	"author": {
