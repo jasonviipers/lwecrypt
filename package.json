@@ -1,5 +1,5 @@
 {
-	"name": "paris",
+	"name": "lwecrypt",
 	"type": "module",
 	"version": "1.0.0",
 	"description": "A collection of utilities for working with Node.js",
@@ -35,7 +35,7 @@
 	},
 	"exports": {
 		".": "./dist/index.js",
-		"./password": "./dist/password/index.js"
+		"./lwe": "./dist/lwe/index.js"
 	},
 	"typesVersions": {
 		"*": {
