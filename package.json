@@ -31,8 +31,8 @@
     "url": "githttps://github.com/jasonviipers/lwecrypt.git"
   },
   "exports": {
-    ".": "./dist/index.js",
-    "./lwe": "./dist/lwe/index.js"
+    ".": "./build/index.js",
+    "./lwe": "./build/lwe/index.js"
   },
   "typesVersions": {
     "*": {
