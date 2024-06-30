@@ -19,8 +19,8 @@ Every module works in any environment, including Node.js, Cloudflare Workers, De
 ## Installation
 
 ```
-npm i paris
-pnpm add paris
-yarn add paris
-bun i paris
+npm i lwecrypt
+pnpm add lwecrypt
+yarn add lwecrypt
+bun i lwecrypt
 ```
