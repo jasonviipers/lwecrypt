@@ -3,10 +3,10 @@
 	"type": "module",
 	"version": "1.0.0",
 	"description": "A collection of utilities for working with Node.js",
-	"types": "dist/index.d.ts",
-	"module": "dist/index.js",
+	"types": "build/index.d.ts",
+	"module": "build/index.js",
 	"scripts": {
-		"build": "rm -rf dist/* && tsc --project tsconfig.build.json",
+		"build": "rm -rf build/* && tsc --project tsconfig.build.json",
 		"format": "prettier -w .",
 		"lint": "eslint src",
 		"test": "jest"
@@ -17,12 +17,9 @@
 		"encoding",
 		"auth",
 		"random",
-		"password",
 		"lattice",
 		"encryption",
-		"typescript",
-		"lwe",
-		"learning with errors"
+		"lwecrypt"
 	],
 	"license": "MIT",
 	"author": {
@@ -39,8 +36,8 @@
 	},
 	"typesVersions": {
 		"*": {
-			"dist/*": [
-				"dist/*"
+			"build/*": [
+				"build/*"
 			]
 		}
 	},
