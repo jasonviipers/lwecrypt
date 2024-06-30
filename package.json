@@ -31,7 +31,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "githttps://github.com/jasonviipers/paris.git"
+		"url": "githttps://github.com/jasonviipers/lwecrypt.git"
 	},
 	"exports": {
 		".": "./dist/index.js",

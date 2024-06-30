@@ -1,4 +1,4 @@
-# `paris`
+# `lwecrypt`
 
 A collection of auth-related utilities, including:
 
