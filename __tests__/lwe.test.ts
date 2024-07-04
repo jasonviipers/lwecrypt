@@ -1,57 +1,69 @@
-import { generateSecretKey, generatePublicKey, encrypt, decrypt } from "../src/lwe";
+import * as crypto from 'crypto';
+import { deriveKey, encryptData, decryptData, QKD_Exchange } from '../src/lwe';
 
-describe('LWE Encryption Scheme', () => {
-  const N = 512;
-  const Q = 12289;
+describe('Encryption Module', () => {
+  it('should correctly encrypt and decrypt data', () => {
+      const password = 'strong_password';
+      const salt = crypto.randomBytes(16);
+      const key = deriveKey(password, salt);
 
-  test('Generate secret key', () => {
-    const secretKey = generateSecretKey(N);
-    expect(secretKey).toHaveLength(N);
-    secretKey.forEach(value => {
-      expect(value).toBeGreaterThanOrEqual(0);
-      expect(value).toBeLessThan(Q);
-    });
+      // Simulate QKD to exchange OTP
+      const otp = QKD_Exchange();
+
+      // Encrypt the plaintext
+      const plaintext = "Hello, World!";
+      const { iv, ciphertext, hmac } = encryptData(plaintext, key);
+
+      // Encrypt the key using OTP (XOR operation for simplicity)
+      const encryptedKey = Buffer.alloc(32);
+      for (let i = 0; i < 32; i++) {
+          encryptedKey[i] = key[i]! ^ otp[i]!;
+      }
+
+      // Decrypt the key using OTP
+      const decryptedKey = Buffer.alloc(32);
+      for (let i = 0; i < 32; i++) {
+          decryptedKey[i] = encryptedKey[i]! ^ otp[i]!;
+      }
+
+      // Decrypt the ciphertext
+      const decryptedText = decryptData(iv, ciphertext, hmac, decryptedKey);
+
+      // Validate results
+      expect(decryptedText).toBe(plaintext);
   });
 
-  test('Generate public key', () => {
-    const secretKey = generateSecretKey(N);
-    const publicKey = generatePublicKey(secretKey, N);
-    expect(publicKey.A).toHaveLength(N);
-    expect(publicKey.b).toHaveLength(N);
-    publicKey.A.forEach(value => {
-      expect(value).toBeGreaterThanOrEqual(0);
-      expect(value).toBeLessThan(Q);
-    });
-    publicKey.b.forEach(value => {
-      expect(value).toBeGreaterThanOrEqual(0);
-      expect(value).toBeLessThan(Q);
-    });
-  });
+  it('should throw an error if HMAC verification fails', () => {
+      const password = 'strong_password';
+      const salt = crypto.randomBytes(16);
+      const key = deriveKey(password, salt);
 
-  test('Encrypt and decrypt a message', () => {
-    const secretKey = generateSecretKey(N);
-    const publicKey = generatePublicKey(secretKey, N);
-    const message = new Array(N).fill(0).map(() => Math.floor(Math.random() * 2)); // Random binary message
+      // Simulate QKD to exchange OTP
+      const otp = QKD_Exchange();
 
-    const ciphertext = encrypt(publicKey.A, publicKey.b, message, N);
-    const decryptedMessage = decrypt(ciphertext.c1, ciphertext.c2, secretKey, N);
+      // Encrypt the plaintext
+      const plaintext = "Hello, World!";
+      const { iv, ciphertext, hmac } = encryptData(plaintext, key);
 
-    expect(decryptedMessage).toHaveLength(N);
-    decryptedMessage.forEach((bit, index) => {
-      expect(bit).toBe(message[index]);
-    });
-  });
+      // Modify the ciphertext to simulate tampering
+      const tamperedCiphertext = Buffer.from(ciphertext);
+      tamperedCiphertext[0] ^= 1;
 
-  test('Decrypt with incorrect secret key should fail', () => {
-    const secretKey = generateSecretKey(N);
-    const publicKey = generatePublicKey(secretKey, N);
-    const message = new Array(N).fill(0).map(() => Math.floor(Math.random() * 2)); // Random binary message
+      // Encrypt the key using OTP (XOR operation for simplicity)
+      const encryptedKey = Buffer.alloc(32);
+      for (let i = 0; i < 32; i++) {
+          encryptedKey[i] = key[i]! ^ otp[i]!;
+      }
 
-    const ciphertext = encrypt(publicKey.A, publicKey.b, message, N);
+      // Decrypt the key using OTP
+      const decryptedKey = Buffer.alloc(32);
+      for (let i = 0; i < 32; i++) {
+          decryptedKey[i] = encryptedKey[i]! ^ otp[i]!;
+      }
 
-    const incorrectSecretKey = generateSecretKey(N);
-    const decryptedMessage = decrypt(ciphertext.c1, ciphertext.c2, incorrectSecretKey, N);
-
-    expect(decryptedMessage).not.toEqual(message);
+      // Try to decrypt the tampered ciphertext
+      expect(() => {
+          decryptData(iv, tamperedCiphertext, hmac, decryptedKey);
+      }).toThrow('HMAC verification failed');
   });
 });

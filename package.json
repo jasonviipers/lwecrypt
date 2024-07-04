@@ -3,10 +3,12 @@
   "type": "module",
   "version": "1.0.0",
   "description": "A collection of utilities for working with Node.js",
-  "types": "build/index.d.ts",
-  "module": "build/index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "module": "dist/index.js",
   "scripts": {
-    "build": "rm -rf build/* && tsc --project tsconfig.build.json",
+    "dev": "tsnd --respawn --transpile-only src/lwe/index.ts",
+    "build": "rm -rf dist/* && tsc --project tsconfig.build.json",
     "format": "prettier -w .",
     "lint": "eslint src",
     "test": "jest"
@@ -31,24 +33,22 @@
     "url": "githttps://github.com/jasonviipers/lwecrypt.git"
   },
   "exports": {
-    ".": "./build/index.js",
-    "./lwe": "./build/lwe/index.js"
+    ".": "./dist/index.js",
+    "./lwe": "./dist/lwe/index.js"
   },
   "typesVersions": {
     "*": {
-      "build/*": [
-        "build/*"
+      "dist/*": [
+        "dist/*"
       ]
     }
   },
   "dependencies": {
     "crypto-js": "^4.2.0",
-    "elliptic": "^6.5.5",
     "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.2.2",
-    "@types/elliptic": "^6.4.18",
     "@types/jest": "^29.5.12",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.14.9",
@@ -59,6 +59,7 @@
     "prettier": "^3.3.2",
     "ts-jest": "^29.1.5",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.5.2"
   }
 }
