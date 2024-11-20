@@ -5,10 +5,11 @@
 	"description": "A collection of utilities for working with Node.js",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
-	"module": "dist/index.js",
+	"module": "dist/index.mjs",
 	"scripts": {
 		"dev": "tsnd --respawn --transpile-only src/lwe/index.ts",
-		"build": "rm -rf dist/* && tsc --project tsconfig.build.json",
+		"build": "tsup src/lwe/index.ts --dts --format cjs,esm --out-dir dist",
+    "release": "bun run build &&  changeset publish",
 		"fix": "bunx biome check --fix --unsafe",
 		"test": "jest"
 	},
@@ -53,6 +54,8 @@
 		"jest": "latest",
 		"ts-jest": "latest",
 		"ts-node-dev": "latest",
+    "@changesets/cli": "latest",
+    "tsup": "latest",
 		"typescript": "latest"
 	}
 }
