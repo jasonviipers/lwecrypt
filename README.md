@@ -5,6 +5,7 @@ A collection of auth-related utilities, including:
 - `lwecrypt/encryption`: Enhanced encryption using AES with quantum key distribution and HMAC.
 
 ## Overview
+
 `lwecrypt` is a modern approach to encryption that offers security based on the hardness of certain lattice problems. Additionally, it includes enhanced encryption utilities for secure data transmission.
 
 ## Features
@@ -23,3 +24,4 @@ npm i lwecrypt
 pnpm add lwecrypt
 yarn add lwecrypt
 bun i lwecrypt
+```

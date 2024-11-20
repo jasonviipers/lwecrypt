@@ -1,65 +1,58 @@
 {
-  "name": "lwecrypt",
-  "type": "module",
-  "version": "1.0.1",
-  "description": "A collection of utilities for working with Node.js",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "module": "dist/index.js",
-  "scripts": {
-    "dev": "tsnd --respawn --transpile-only src/lwe/index.ts",
-    "build": "rm -rf dist/* && tsc --project tsconfig.build.json",
-    "format": "prettier -w .",
-    "lint": "eslint src",
-    "test": "jest"
-  },
-  "keywords": [
-    "auth",
-    "otp",
-    "encoding",
-    "auth",
-    "random",
-    "lattice",
-    "encryption",
-    "lwecrypt"
-  ],
-  "license": "MIT",
-  "author": {
-    "name": "Jason Michel YAWILHIT",
-    "email": "jason@chatr.fr"
-  },
-  "repository": {
-    "type": "git",
-    "url": "githttps://github.com/jasonviipers/lwecrypt.git"
-  },
-  "exports": {
-    ".": "./dist/index.js",
-    "./lwe": "./dist/lwe/index.js"
-  },
-  "typesVersions": {
-    "*": {
-      "dist/*": [
-        "dist/*"
-      ]
-    }
-  },
-  "dependencies": {
-    "crypto-js": "latest",
-    "jsonwebtoken": "latest"
-  },
-  "devDependencies": {
-    "@types/crypto-js": "latest",
-    "@types/jest": "latest",
-    "@types/jsonwebtoken": "latest",
-    "@types/node": "latest",
-    "@typescript-eslint/eslint-plugin": "latest",
-    "@typescript-eslint/parser": "latest",
-    "eslint": "latest",
-    "jest": "latest",
-    "prettier": "latest",
-    "ts-jest": "latest",
-    "ts-node": "latest",
-    "ts-node-dev": "latest",
-    "typescript": "latest"
-  }
+	"name": "lwecrypt",
+	"type": "module",
+	"version": "1.0.1",
+	"description": "A collection of utilities for working with Node.js",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"module": "dist/index.js",
+	"scripts": {
+		"dev": "tsnd --respawn --transpile-only src/lwe/index.ts",
+		"build": "rm -rf dist/* && tsc --project tsconfig.build.json",
+		"fix": "bunx biome check --fix --unsafe",
+		"test": "jest"
+	},
+	"keywords": [
+		"auth",
+		"otp",
+		"encoding",
+		"auth",
+		"random",
+		"lattice",
+		"encryption",
+		"lwecrypt"
+	],
+	"license": "MIT",
+	"author": {
+		"name": "Jason Michel YAWILHIT",
+		"email": "jason@chatr.fr"
+	},
+	"repository": {
+		"type": "git",
+		"url": "githttps://github.com/jasonviipers/lwecrypt.git"
+	},
+	"exports": {
+		".": "./dist/index.js",
+		"./lwe": "./dist/lwe/index.js"
+	},
+	"typesVersions": {
+		"*": {
+			"dist/*": ["dist/*"]
+		}
+	},
+	"dependencies": {
+		"crypto-js": "latest",
+		"jsonwebtoken": "latest"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@types/crypto-js": "latest",
+		"@types/jest": "latest",
+		"@types/jsonwebtoken": "latest",
+		"@types/node": "latest",
+		"jest": "latest",
+		"ts-jest": "latest",
+		"ts-node-dev": "latest",
+		"typescript": "latest"
+	}
 }
