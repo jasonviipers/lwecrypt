@@ -1,13 +1,29 @@
 import * as crypto from 'crypto';
 
+/**
+ * Simulates Quantum Key Distribution by generating a random key.
+ * @returns {Buffer} A 32-byte random key.
+ */
 function QKD_Exchange(): Buffer {
     return crypto.randomBytes(32);
 }
 
+/**
+ * Derives a cryptographic key from a password using PBKDF2.
+ * @param {string} password - The password to derive the key from.
+ * @param {Buffer} salt - The salt to use for the derivation.
+ * @returns {Buffer} The derived key.
+ */
 function deriveKey(password: string, salt: Buffer): Buffer {
     return crypto.pbkdf2Sync(password, salt, 100000, 32, 'sha256');
 }
 
+/**
+ * Encrypts data using AES-256-CBC and generates an HMAC for integrity.
+ * @param {string} plaintext - The plaintext to encrypt.
+ * @param {Buffer} key - The encryption key.
+ * @returns {{ iv: Buffer, ciphertext: Buffer, hmac: Buffer }} The initialization vector, ciphertext, and HMAC.
+ */
 function encryptData(plaintext: string, key: Buffer): { iv: Buffer, ciphertext: Buffer, hmac: Buffer } {
     const iv = crypto.randomBytes(16);
     const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
@@ -23,13 +39,22 @@ function encryptData(plaintext: string, key: Buffer): { iv: Buffer, ciphertext: 
     return { iv, ciphertext, hmac: hmacDigest };
 }
 
+/**
+ * Decrypts data using AES-256-CBC and verifies the HMAC for integrity.
+ * @param {Buffer} iv - The initialization vector.
+ * @param {Buffer} ciphertext - The ciphertext to decrypt.
+ * @param {Buffer} hmac - The HMAC to verify.
+ * @param {Buffer} key - The decryption key.
+ * @returns {string} The decrypted plaintext.
+ * @throws {Error} If HMAC verification fails.
+ */
 function decryptData(iv: Buffer, ciphertext: Buffer, hmac: Buffer, key: Buffer): string {
     const hmacVerify = crypto.createHmac('sha256', key);
     hmacVerify.update(iv);
     hmacVerify.update(ciphertext);
     const hmacDigest = hmacVerify.digest();
 
-    if (!hmac.equals(hmacDigest)) {
+    if (!crypto.timingSafeEqual(hmac, hmacDigest)) {
         throw new Error('HMAC verification failed');
     }
 
