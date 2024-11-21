@@ -9,13 +9,38 @@ function QKD_Exchange(): Buffer {
 }
 
 /**
+ * Generates a random salt of a specified number of bytes.
+ * @param {number} byteLength - The number of bytes for the salt.
+ * @returns {Promise<Buffer>} A random salt of the specified length.
+ */
+async function generateSalt(byteLength: number): Promise<Buffer> {
+	return new Promise((resolve, reject) => {
+		crypto.randomBytes(byteLength, (err, salt) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(salt);
+			}
+		});
+	});
+}
+
+/**
  * Derives a cryptographic key from a password using PBKDF2.
  * @param {string} password - The password to derive the key from.
  * @param {Buffer} salt - The salt to use for the derivation.
  * @returns {Buffer} The derived key.
  */
-function deriveKey(password: string, salt: Buffer): Buffer {
-	return crypto.pbkdf2Sync(password, salt, 100000, 32, "sha256");
+async function deriveKey(password: string, salt: Buffer): Promise<Buffer> {
+	return new Promise((resolve, reject) => {
+		crypto.pbkdf2(password, salt, 100000, 32, "sha256", (err, derivedKey) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(derivedKey);
+			}
+		});
+	});
 }
 
 /**
@@ -24,10 +49,10 @@ function deriveKey(password: string, salt: Buffer): Buffer {
  * @param {Buffer} key - The encryption key.
  * @returns {{ iv: Buffer, ciphertext: Buffer, hmac: Buffer }} The initialization vector, ciphertext, and HMAC.
  */
-function encryptData(
+async function encrypt(
 	plaintext: string,
 	key: Buffer,
-): { iv: Buffer; ciphertext: Buffer; hmac: Buffer } {
+): Promise<{ iv: Buffer; ciphertext: Buffer; hmac: Buffer }> {
 	const iv = crypto.randomBytes(16);
 	const cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
 	let encrypted = cipher.update(plaintext, "utf8", "base64");
@@ -51,12 +76,12 @@ function encryptData(
  * @returns {string} The decrypted plaintext.
  * @throws {Error} If HMAC verification fails.
  */
-function decryptData(
+async function decrypt(
 	iv: Buffer,
 	ciphertext: Buffer,
 	hmac: Buffer,
 	key: Buffer,
-): string {
+): Promise<string> {
 	const hmacVerify = crypto.createHmac("sha256", key);
 	hmacVerify.update(iv);
 	hmacVerify.update(ciphertext);
@@ -76,4 +101,4 @@ function decryptData(
 	return decrypted;
 }
 
-export { QKD_Exchange, deriveKey, encryptData, decryptData };
+export { QKD_Exchange, deriveKey, encrypt, decrypt, generateSalt };

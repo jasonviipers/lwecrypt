@@ -1,11 +1,22 @@
 import * as crypto from "node:crypto";
-import { QKD_Exchange, decryptData, deriveKey, encryptData } from "../src/lwe";
+import {
+	QKD_Exchange,
+	decrypt,
+	deriveKey,
+	encrypt,
+	generateSalt,
+} from "../src/lwe";
 
 describe("Encryption and Decryption Tests", () => {
 	const password = "securepassword";
-	const salt = crypto.randomBytes(16);
-	const key = deriveKey(password, salt);
+	let salt: Buffer;
+	let key: Buffer;
 	const plaintext = "This is a secret message";
+
+	beforeAll(async () => {
+		salt = await generateSalt(16);
+		key = await deriveKey(password, salt);
+	});
 
 	test("QKD_Exchange should return a 32-byte Buffer", () => {
 		const qkdKey = QKD_Exchange();
@@ -18,23 +29,23 @@ describe("Encryption and Decryption Tests", () => {
 		expect(key).toBeInstanceOf(Buffer);
 	});
 
-	test("encryptData and decryptData should work correctly", () => {
-		const { iv, ciphertext, hmac } = encryptData(plaintext, key);
+	test("encrypt and decrypt should work correctly", async () => {
+		const { iv, ciphertext, hmac } = await encrypt(plaintext, key);
 
 		expect(iv).toHaveLength(16);
 		expect(iv).toBeInstanceOf(Buffer);
 		expect(ciphertext).toBeInstanceOf(Buffer);
 		expect(hmac).toBeInstanceOf(Buffer);
 
-		const decryptedText = decryptData(iv, ciphertext, hmac, key);
+		const decryptedText = await decrypt(iv, ciphertext, hmac, key);
 		expect(decryptedText).toBe(plaintext);
 	});
 
-	test("decryptData should throw an error if HMAC verification fails", () => {
-		const { iv, ciphertext } = encryptData(plaintext, key);
+	test("decrypt should throw an error if HMAC verification fails", async () => {
+		const { iv, ciphertext } = await encrypt(plaintext, key);
 		const invalidHmac = crypto.randomBytes(32);
 
-		expect(() => decryptData(iv, ciphertext, invalidHmac, key)).toThrow(
+		await expect(decrypt(iv, ciphertext, invalidHmac, key)).rejects.toThrow(
 			"HMAC verification failed",
 		);
 	});
