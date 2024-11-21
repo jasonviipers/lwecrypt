@@ -2,7 +2,7 @@
 
 A collection of auth-related utilities, including:
 
-- `lwecrypt/encryption`: Enhanced encryption using AES with quantum key distribution and HMAC.
+- `lwecrypt/lwe`: Enhanced encryption using AES with quantum key distribution and HMAC.
 
 ## Overview
 
