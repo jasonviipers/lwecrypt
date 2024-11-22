@@ -1,5 +1,11 @@
 # lwecrypt
 
+## 0.2.0
+
+### Minor Changes
+
+- 9a66cf9: refactor
+
 ## 0.1.1
 
 ### Patch Changes
