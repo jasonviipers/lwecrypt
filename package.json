@@ -38,9 +38,7 @@
 	},
 	"typesVersions": {
 		"*": {
-			"dist/*": [
-				"dist/*"
-			]
+			"dist/*": ["dist/*"]
 		}
 	},
 	"dependencies": {
