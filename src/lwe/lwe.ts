@@ -4,7 +4,7 @@ import * as crypto from "node:crypto";
  * Simulates Quantum Key Distribution by generating a random key.
  * @returns {Buffer} A 32-byte random key.
  */
-function QKD_Exchange(): Buffer {
+export function QKD_Exchange(): Buffer {
 	return crypto.randomBytes(32);
 }
 
@@ -13,7 +13,7 @@ function QKD_Exchange(): Buffer {
  * @param {number} byteLength - The number of bytes for the salt.
  * @returns {Promise<Buffer>} A random salt of the specified length.
  */
-async function generateSalt(byteLength: number): Promise<Buffer> {
+export async function generateSalt(byteLength: number): Promise<Buffer> {
 	return new Promise((resolve, reject) => {
 		crypto.randomBytes(byteLength, (err, salt) => {
 			if (err) {
@@ -29,9 +29,12 @@ async function generateSalt(byteLength: number): Promise<Buffer> {
  * Derives a cryptographic key from a password using PBKDF2.
  * @param {string} password - The password to derive the key from.
  * @param {Buffer} salt - The salt to use for the derivation.
- * @returns {Buffer} The derived key.
+ * @returns {Promise<Buffer>} The derived key.
  */
-async function deriveKey(password: string, salt: Buffer): Promise<Buffer> {
+export async function deriveKeyPBKDF2(
+	password: string,
+	salt: Buffer,
+): Promise<Buffer> {
 	return new Promise((resolve, reject) => {
 		crypto.pbkdf2(password, salt, 100000, 32, "sha256", (err, derivedKey) => {
 			if (err) {
@@ -44,12 +47,39 @@ async function deriveKey(password: string, salt: Buffer): Promise<Buffer> {
 }
 
 /**
+ * Derives a cryptographic key from a password using scrypt.
+ * @param {string} password - The password to derive the key from.
+ * @param {Buffer} salt - The salt to use for the derivation.
+ * @returns {Promise<Buffer>} The derived key.
+ */
+export async function deriveKey(
+	password: string,
+	salt: Buffer,
+): Promise<Buffer> {
+	return new Promise((resolve, reject) => {
+		crypto.scrypt(
+			password,
+			salt,
+			32,
+			{ cost: 16384, blockSize: 8, parallelization: 1 },
+			(err, derivedKey) => {
+				if (err) {
+					reject(err);
+				} else {
+					resolve(derivedKey);
+				}
+			},
+		);
+	});
+}
+
+/**
  * Encrypts data using AES-256-CBC and generates an HMAC for integrity.
  * @param {string} plaintext - The plaintext to encrypt.
  * @param {Buffer} key - The encryption key.
  * @returns {{ iv: Buffer, ciphertext: Buffer, hmac: Buffer }} The initialization vector, ciphertext, and HMAC.
  */
-async function encrypt(
+export async function encrypt(
 	plaintext: string,
 	key: Buffer,
 ): Promise<{ iv: Buffer; ciphertext: Buffer; hmac: Buffer }> {
@@ -76,7 +106,7 @@ async function encrypt(
  * @returns {string} The decrypted plaintext.
  * @throws {Error} If HMAC verification fails.
  */
-async function decrypt(
+export async function decrypt(
 	iv: Buffer,
 	ciphertext: Buffer,
 	hmac: Buffer,
@@ -100,5 +130,3 @@ async function decrypt(
 	decrypted += decipher.final("utf8");
 	return decrypted;
 }
-
-export { QKD_Exchange, deriveKey, encrypt, decrypt, generateSalt };
