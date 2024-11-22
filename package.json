@@ -1,11 +1,12 @@
 {
 	"name": "lwecrypt",
 	"type": "module",
-	"version": "1.0.1",
+	"version": "0.0.1",
 	"description": "A collection of utilities for working with Node.js",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"module": "dist/index.mjs",
+	"private": false,
 	"scripts": {
 		"build": "tsup",
 		"release": "bun run build && changeset publish",
@@ -45,19 +46,22 @@
 		"jsonwebtoken": "latest"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.9.4",
+		"@types/bun": "latest",
+		"@biomejs/biome": "latest",
 		"@types/crypto-js": "latest",
 		"@types/jest": "latest",
 		"@types/jsonwebtoken": "latest",
 		"@types/node": "latest",
 		"jest": "latest",
 		"ts-jest": "latest",
-		"ts-node-dev": "latest",
 		"@changesets/cli": "latest",
-		"tsup": "latest",
+		"tsup": "latest"
+	},
+	"peerDependencies": {
 		"typescript": "latest"
 	},
-	"publishConfig": {
-		"access": "public"
+	"jest": {
+		"preset": "ts-jest",
+		"testEnvironment": "node"
 	}
 }
