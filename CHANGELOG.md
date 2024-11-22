@@ -1,5 +1,11 @@
 # lwecrypt
 
+## 0.1.1
+
+### Patch Changes
+
+- c3e0e4f: Refactors encryption module dependencies
+
 ## 0.1.0
 
 ### Minor Changes
