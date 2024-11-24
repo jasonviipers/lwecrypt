@@ -41,16 +41,10 @@
 			"dist/*": ["dist/*"]
 		}
 	},
-	"dependencies": {
-		"crypto-js": "latest",
-		"jsonwebtoken": "latest"
-	},
 	"devDependencies": {
 		"@types/bun": "latest",
 		"@biomejs/biome": "latest",
-		"@types/crypto-js": "latest",
 		"@types/jest": "latest",
-		"@types/jsonwebtoken": "latest",
 		"@types/node": "latest",
 		"jest": "latest",
 		"ts-jest": "latest",

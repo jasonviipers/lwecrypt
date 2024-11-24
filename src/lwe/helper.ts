@@ -1,6 +1,7 @@
 /**
  * Helper functions for LWE encryption and decryption.
  */
+import { createKeyRotationManager } from "./krm";
 import { CryptoError, decrypt, deriveKey, encrypt, type EncryptionResult, generateSalt } from "./lwe";
 import { fromStorableFormat, isValidStorableFormat, toStorableFormat, ValidationError } from "./utils";
 

@@ -239,3 +239,13 @@ export async function generateKeyPair(): Promise<{
 		);
 	});
 }
+
+/**
+ * Secure memory wiping function
+ * @param buffer The buffer to wipe
+ */
+export function secureMemoryWipe(buffer: Buffer): void {
+    crypto.randomFill(buffer, (err, buf) => {
+        buf.fill(0);
+    });
+}
