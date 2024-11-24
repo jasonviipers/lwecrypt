@@ -1,5 +1,11 @@
 # lwecrypt
 
+## 0.3.0
+
+### Minor Changes
+
+- a6ef0fa: add utils function
+
 ## 0.2.0
 
 ### Minor Changes
