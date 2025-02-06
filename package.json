@@ -1,0 +1,64 @@
+{
+	"name": "lwecrypt",
+	"type": "module",
+	"version": "0.3.0",
+	"description": "A collection of utilities for working with Node.js",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"module": "dist/index.mjs",
+	"private": false,
+	"scripts": {
+		"build": "tsup",
+		"release": "bun run build && changeset publish",
+		"fix": "bunx biome check --fix --unsafe",
+		"test": "jest"
+	},
+	"keywords": [
+		"auth",
+		"otp",
+		"encoding",
+		"auth",
+		"random",
+		"lattice",
+		"encryption",
+		"lwecrypt"
+	],
+	"license": "MIT",
+	"author": {
+		"name": "Jason Michel YAWILHIT",
+		"email": "jason@chatr.fr"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/jasonviipers/lwecrypt.git"
+	},
+	"exports": {
+		".": "./dist/index.js",
+		"./lwe": "./dist/lwe/index.js"
+	},
+	"typesVersions": {
+		"*": {
+			"dist/*": [
+				"dist/*"
+			]
+		}
+	},
+	"devDependencies": {
+		"argon2": "latest",
+		"@types/bun": "latest",
+		"@biomejs/biome": "latest",
+		"@types/jest": "latest",
+		"@types/node": "latest",
+		"jest": "latest",
+		"ts-jest": "latest",
+		"@changesets/cli": "latest",
+		"tsup": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "latest"
+	},
+	"jest": {
+		"preset": "ts-jest",
+		"testEnvironment": "node"
+	}
+}
